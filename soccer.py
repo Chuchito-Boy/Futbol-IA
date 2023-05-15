@@ -34,8 +34,13 @@ class Player(pygame.sprite.Sprite):
                     if self.rect.y >= 300 and self.rect.y <= 390:
                         if self.rect.x == 50:
                             goles_Azules += 1
+                            self.rect.x = 442
+                            self.rect.y = 367
+
                         if self.rect.x == 832:
                             goles_Blancos += 1
+                            self.rect.x = 442
+                            self.rect.y = 367
                                
                 if self.rect.y == 125 or self.rect.y == 610:
                     Ball_speed_y = -Ball_speed_y
