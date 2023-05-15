@@ -7,7 +7,11 @@ JugadorT2 = ['J2P1.png']
 Ball_speed_x = 1
 Ball_speed_y = 1
 
+goles_Blancos = 0
+goles_Azules = 0
+
 class Player(pygame.sprite.Sprite):
+
     def __init__(self, image_path, x, y,id):
         super().__init__()
         self.id = id
@@ -17,15 +21,26 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y
     
     def update(self,Ball):
+        global goles_Blancos 
+        global goles_Azules 
         global Ball_speed_x,Ball_speed_y
         if self.id == 0:       
             if((self.rect.x >= 50 and self.rect.x <= 832)and(self.rect.y >= 125 and self.rect.y <= 610)):
                 self.rect.x += Ball_speed_x
                 self.rect.y += Ball_speed_y
+                
                 if self.rect.x == 50 or self.rect.x == 832:
-                    Ball_speed_x = -Ball_speed_x 
+                    Ball_speed_x = -Ball_speed_x
+                    if self.rect.y >= 300 and self.rect.y <= 390:
+                        if self.rect.x == 50:
+                            goles_Azules += 1
+                        if self.rect.x == 832:
+                            goles_Blancos += 1
+                               
                 if self.rect.y == 125 or self.rect.y == 610:
                     Ball_speed_y = -Ball_speed_y
+                    
+                
         else:
 #------------Equipo Blanco
             #Portero
@@ -67,17 +82,17 @@ class Player(pygame.sprite.Sprite):
                 limites(self,450,785,130,570)
             #Delanteros
             if self.id == 12 and self.rect.x>95 and self.rect.x<516 and self.rect.y > 130 and self.rect.y < 570:
-                if self.rect.x >440:
+                if self.rect.x >435:
                      self.rect.x -= 1
                 else:
                      limites(self,95,430,130,570)
             if self.id == 13 and self.rect.x>60 and self.rect.x<516 and self.rect.y > 130 and self.rect.y < 570:
-                if self.rect.x >440:
+                if self.rect.x >435:
                      self.rect.x -= 1
                 else:
                      limites(self,95,430,130,570)
             if self.id == 14 and self.rect.x>60 and self.rect.x<516 and self.rect.y > 130 and self.rect.y < 570:
-                if self.rect.x >440:
+                if self.rect.x >435:
                      self.rect.x -= 1
                 else:
                      limites(self,95,430,130,570)
@@ -183,11 +198,16 @@ while True:
                 Timer_Enable = True
                 Start_Button_Enable = False
                 Reset_Button_Enable = True
+                #TodosJugadores.update(Balon) #
+                #TodosJugadores.draw(ventana) #
             if RESET.collidepoint(pygame.mouse.get_pos()) and Reset_Button_Enable:
                 Timer_Enable = False
                 minutos = 0
                 Start_Button_Enable = True
                 Reset_Button_Enable = False
+                #TodosJugadores.update(Balon) #
+                #TodosJugadores.draw(ventana) #
+
 
     # Limpiar la ventana
     ventana.fill((99,2,36,255))
@@ -205,15 +225,40 @@ while True:
         texto = "00:00"
 
     texto_renderizado = pygame.font.SysFont(None, 36).render(texto, True, (255,255,255))
-    Name_Team1 = pygame.font.SysFont(None, 42).render("Blancos    0", True, (255,255,255))
-    Name_Team2 = pygame.font.SysFont(None, 42).render("0     Azules", True, (255,255,255))
+    Name_Team1 = pygame.font.SysFont(None, 42).render(f"Blancos  {goles_Blancos}", True, (255,255,255))
+    Name_Team2 = pygame.font.SysFont(None, 42).render(f"{goles_Azules}  Azules", True, (255,255,255))
     ventana.blit(texto_renderizado, (422,12))
     ventana.blit(Name_Team1, (185,52))
     ventana.blit(Name_Team2, (565,52))
 
-    TodosJugadores.update(Balon)
-    TodosJugadores.draw(ventana)
+    if Start_Button_Enable==False:
+        TodosJugadores.update(Balon)
+        TodosJugadores.draw(ventana)
 
+    if Reset_Button_Enable==False:
+        # Creacion Jugadores Equipo Blanco
+        JugadorB1 = Player(JugadorT1[0],60,350,1)
+        JugadorB2 = Player(JugadorT1[0],220,350,2)
+        JugadorB3 = Player(JugadorT1[0],220,180,3)
+        JugadorB4 = Player(JugadorT1[0],220,520,4)
+        JugadorB5 = Player(JugadorT1[0],400,350,5)
+        JugadorB6 = Player(JugadorT1[0],400,180,6)
+        JugadorB7 = Player(JugadorT1[0],400,520,7)
+        # Creacion Jugadores Equipo Azul
+        JugadorA1 = Player(JugadorT2[0],825,350,8)
+        JugadorA2 = Player(JugadorT2[0],665,350,9)
+        JugadorA3 = Player(JugadorT2[0],665,180,10)
+        JugadorA4 = Player(JugadorT2[0],665,520,11)
+        JugadorA5 = Player(JugadorT2[0],515,350,12)
+        JugadorA6 = Player(JugadorT2[0],515,180,13)
+        JugadorA7 = Player(JugadorT2[0],515,520,14)
+        Balon = Player("balon.png",442,367,0)
+        TodosJugadores = pygame.sprite.Group()
+        TodosJugadores.add(JugadorB1,JugadorB2,JugadorB3,JugadorB4,JugadorB5,JugadorB6,JugadorB7,JugadorA1,JugadorA2,JugadorA3,JugadorA4,JugadorA5,JugadorA6,JugadorA7,Balon)
+        minutos = 0
+        goles_Azules = 0
+        goles_Blancos = 0
+         
     # pygame.time.wait(5)
 
     pygame.display.flip()
