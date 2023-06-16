@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cronómetro</title>
+  <style>
+    .container {
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    #display {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    #buttons {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="display">00:00:00</div>
+    <div id="buttons">
+      <button onclick="startTimer()">Iniciar</button>
+      <button onclick="stopTimer()">Detener</button>
+      <button onclick="resetTimer()">Reiniciar</button>
+    </div>
+  </div>
+
+  <script>
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+    var timer;
+
+    function addLeadingZero(value) {
+      return value < 10 ? "0" + value : value;
+    }
+
+    function updateDisplay() {
+      var display = document.getElementById("display");
+      display.textContent = addLeadingZero(hours) + ":" + addLeadingZero(minutes) + ":" + addLeadingZero(seconds);
+    }
+
+    function startTimer() {
+      timer = setInterval(function() {
+        seconds++;
+        if (seconds >= 60) {
+          seconds = 0;
+          minutes++;
+          if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+          }
+        }
+        updateDisplay();
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timer);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      hours = 0;
+      minutes = 0;
+      seconds = 0;
+      updateDisplay();
+    }
+  </script>
+</body>
+</html>
